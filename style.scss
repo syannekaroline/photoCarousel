@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+$n:5; /* number of images*/
+
+h1
+{
+    font-family: 'Great Vibes', cursive;
+    color: #fff;
+    margin: auto;
+    top: 20px;
+    font-size: 75px;
+    text-shadow:  0 0 8px #fff;
+}
+
+.gallery  {
+  --d: 10s; /* duration */
+  
+  display: grid;
+  place-content: center;
+  width: 300px;
+  margin: auto
+}
+.gallery > img {
+  grid-area: 1/1;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 10px solid #f2f2f2;
+  box-shadow: 0 0 4px #0007;
+  animation: slide var(--d) infinite;
+  border-radius: 15px;
+}
+.gallery img:last-child {
+  animation-name: slide-last;
+}
+
+.wave{
+    font-size: 35px;
+    text-align: center;
+    margin: auto;
+}
+.wave span{
+    color: var(--c);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    display: inline-block;
+    filter: drop-shadow(0 0 20px var(--c)) drop-shadow(0 0 60px var(--c));
+    animation: wave-anim 1s infinite;
+    animation-delay: calc(0.1s * var(--item));
+}
+
+@for $i from 1 to ($n + 1) {
+  .gallery > img:nth-child(#{$i}) {
+    animation-delay: calc(#{(1 - $i)/$n}*var(--d));
+    --r: #{(-20 + random(40))*1deg};
+  }
+}
+
+@keyframes slide {
+  0%,100%,
+  #{100.01 - 100/$n}% {transform: translateX(0%) rotate(var(--r));  z-index:3}
+  #{50/$n}%           {transform: translateX(-120%) rotate(var(--r));z-index:3}
+  #{50/$n + .01}%     {transform: translateX(-120%) rotate(var(--r));z-index:-3}
+  #{100/$n}%,
+  #{100 - 100/$n}%    {transform: translateX(0%)  rotate(var(--r)); z-index:-3}
+}
+
+@keyframes slide-last {
+  0%,100%,
+  #{100.01 - 50/$n}% {transform: translateX(0%) rotate(var(--r));  z-index:3}
+  #{50/$n}%          {transform: translateX(120%) rotate(var(--r));z-index:3}
+  #{50/$n + .01}%    {transform: translateX(120%) rotate(var(--r));z-index:-3}
+  #{100/$n}%,
+  #{100 - 50/$n}%    {transform: translateX(0%) rotate(var(--r)); z-index:-3}
+}
+
+@keyframes wave-anim{
+    0%,
+    40%,
+    100% {
+        transform: translateY(0);
+    }
+    20% {
+        transform: translateY(-20px);
+    }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 0 calc((100%)/8) calc((100%)/3) calc((100%)/3);
+  row-gap: 80px;
+  place-content: center;
+  background: #130b27;
+  overflow: hidden;
+}
+
+
+/* Confetti falling */
+$k: 400;
+* {
+  box-sizing: border-box;
+}
+body {
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+#confetti-container {
+  width: 100vw;
+  height: 100vh;
+  position:relative;
+}
+.confetti {
+  position: absolute;
+  z-index: 999;
+}
+.confetti .rotate {
+  animation: driftRotate 1s infinite both ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+.confetti .askew {
+  width: 100%;
+  height: 100%;
+  animation: drift 1s infinite alternate both ease-in-out;
+}
+@for $i from 0 to $k {  
+  .confetti:nth-child(#{$i}) .askew {
+    $time: 1s + random(100)*.01s;
+    animation-duration: $time;
+    animation-delay: -$time*random(100)*.01;
+	}
+  .confetti:nth-child(#{$i}) .rotate {
+    $time: 1s + random(100)*.01s;
+    animation-duration: $time;
+    animation-delay: -$time*random(100)*.01;
+	}
+}
+
+@keyframes drift {
+  0% {
+    transform: skewY(10deg) translate3d(-250%, 0, 0);
+  }
+  100% {
+    transform: skewY(-10deg) translate3d(250%, 0, 0);
+  }
+}
+@keyframes driftRotate {
+  0% {
+    transform: rotateX(0) ;
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
